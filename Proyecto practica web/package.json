@@ -1,0 +1,25 @@
+{
+  "name": "proyecto-practica-web",
+  "version": "1.0.0",
+  "description": "Proyecto practica web",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/donjosh-ua/WebDev.git"
+  },
+  "keywords": [
+    "Practica"
+  ],
+  "author": "Santiago Velez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/donjosh-ua/WebDev/issues"
+  },
+  "homepage": "https://github.com/donjosh-ua/WebDev#readme",
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
