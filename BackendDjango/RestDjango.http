@@ -1,3 +1,33 @@
 GET http://localhost:8000
 ###
+
+#GET ALL PRODUCTS
 GET http://localhost:8000/api/products/all/
+###
+#GET ID PRODUCT
+GET http://localhost:8000/api/products/id/1
+###
+PUT  http://localhost:8000/api/products/id/1/
+Content-Type: application/json
+
+{
+    "name": "H",
+    "description": "Updated Product Description",
+    "quantity": 24
+}
+###
+POST http://localhost:8000/api/products/
+Content-Type: application/json
+
+{
+    "name": "old hentai",
+    "description": "in 360p",
+    "quantity": 12
+}
+###
+PATCH  http://localhost:8000/api/products/id/1/stock/
+Content-Type: application/json
+
+{
+    "quantity": 12
+}
