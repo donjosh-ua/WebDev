@@ -1,69 +1,68 @@
-from django.shortcuts import render
-from django.http import HttpResponse
 from .models import Product
-from django.core import serializers
-from django.http import JsonResponse
-from django.views import View
-
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from .serializers import ProductSerializer
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 import json
+from rest_framework.views import APIView
+from rest_framework import status
+
+from django.http import HttpResponse,JsonResponse
 
 # Create your views here.
 
 #reduce stock for a product
 @csrf_exempt
-def patch_products_stock(request,id):
-    json_request = json.loads(request.body)
-    object = Product.objects.get(id=id)
-    object.quantity -= json_request['quantity']
-    object.save()
-    return HttpResponse('reduced')
+@api_view(['PATCH'])
+def product_stock(request,id):
+    item = Product.objects.get(id=id)
+    quantity = json.loads(request.body)['quantity']
+    item.quantity -= quantity
+    item.save()
+    serializable = ProductSerializer(item)
+    return Response(serializable.data)
 
 #retrieving all products, all information
+
+#DRF Version
+@api_view(['GET'])
 def get_products(request):
-    querySet = Product.objects.all().values()
-    data = list(querySet)
-    return JsonResponse(data,safe=False)
+    items = Product.objects.all()
+    serializer =  ProductSerializer(items,many=True)
+    return Response(serializer.data)
+    
+
 
 @csrf_exempt
+@api_view(['POST'])
 def post_product(request):
-    json_request = json.loads(request.body)
-    object = Product(
-        name = json_request['name'],
-        description = json_request['description'],
-        quantity = json_request['quantity'],
-    )
-    object.save()
-    return HttpResponse('created')
+    serializable = ProductSerializer(data=request.data) #Serialize json to model instance, if valid then save it
+    if serializable.is_valid():
+        serializable.save()
+    return Response(serializable.data)
 
 
 
 @method_decorator(csrf_exempt, name='dispatch') #decorator for allowing put patch methods for testing
-class ProductById(View):
+class ProductById(APIView):
+    
     def get_object(self,id):
-        model_object = Product.objects.get(id=id)
-        object = {
-            "id":model_object.id,
-            "name":model_object.name,
-            "description": model_object.description,
-            "quantity":model_object.quantity
-        }
-        return object
-    
+        return Product.objects.get(id=id)
+
     def get(self,request,id):
-        data = self.get_object(id)
-        return JsonResponse(data) 
-    
-    def delete(self,request,id): #logical deletion
-        pass
+        serializer = ProductSerializer(self.get_object(id))
+        return Response(serializer.data) 
     
     def put(self,request,id):
         object = Product.objects.get(id=id)
-        json_request = json.loads(request.body)
-        object.name = json_request['name']
-        object.description = json_request['description']
-        object.quantity = json_request['quantity']
+        serializer = ProductSerializer(object,data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+        return Response(serializer.data)
+    
+    def delete(self,request,id): #logical deletion
+        object = Product.objects.get(id=id)
+        object.delete()
         object.save()
-        return JsonResponse(self.get_object(id=id))
-        
+        return Response(status=status.HTTP_200_OK)

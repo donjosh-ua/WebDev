@@ -11,7 +11,7 @@ PUT  http://localhost:8000/api/products/id/1/
 Content-Type: application/json
 
 {
-    "name": "H",
+    "name": "SI SE ACTUALIZAA",
     "description": "Updated Product Description",
     "quantity": 24
 }
@@ -29,5 +29,8 @@ PATCH  http://localhost:8000/api/products/id/1/stock/
 Content-Type: application/json
 
 {
+    "names":"hello",
     "quantity": 12
 }
+###
+DELETE  http://localhost:8000/api/products/id/5/
