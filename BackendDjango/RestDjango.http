@@ -1,0 +1,37 @@
+GET http://localhost:8000
+###
+
+#GET ALL PRODUCTS
+GET http://localhost:8000/api/products/all/
+###
+#GET ID PRODUCT
+GET http://localhost:8000/api/products/id/1
+###
+PATCH   http://localhost:8000/api/products/id/2/
+Content-Type: application/json
+
+{
+    "name":"Cheesecake de blueberries",
+    "description": "blueberries dulces"
+}
+###
+POST http://localhost:8000/api/products/
+Content-Type: application/json
+
+{
+    "name": "Cheesecake de menta",
+    "description": "Menta recien recogida",
+    "quantity": 4,
+    "price":10,
+    "img_route":"/cheesecake_mint_blue.jpg"
+}
+###
+PATCH  http://localhost:8000/api/products/id/1/stock/
+Content-Type: application/json
+
+{
+    "names":"hello",
+    "quantity": 12
+}
+###
+DELETE  http://localhost:8000/api/products/id/5/
