@@ -1,6 +1,13 @@
-@TestDotnet_HostAddress = http://localhost:5086
+# @name create
+POST {{host}}/products
+Authorization: Bearer {{token}}
+Content-Type: application/json
 
-GET {{TestDotnet_HostAddress}}/weatherforecast/
-Accept: application/json
+{
+    "name": "Product 1",
+    "category": "Category 1",
+    "subcategory": "Subcategory 1"
+}
 
-###
+### get created product
+GET {{create.response.headers.Location}}
